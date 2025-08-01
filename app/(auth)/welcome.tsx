@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import Swiper from "react-native-swiper";
 import { onboarding } from "@/constants";
@@ -18,7 +18,6 @@ export default function Onboarding() {
         <Text className="text-black text-md font-JakartaBold">Skip</Text>
       </TouchableOpacity>
       <Swiper
-      
         ref={swiperRef}
         loop={false}
         dot={
@@ -31,7 +30,19 @@ export default function Onboarding() {
       >
         {onboarding.map((item) => (
           <View key={item.id} className="flex items-center justify-center">
-            <Text>{item.title}</Text>
+            <Image
+              source={item.image}
+              className="w-full h-[300px]"
+              resizeMode="contain"
+            />
+            <View className="flex flex-row items-center justify-center w-full mt-10 ">
+              <Text className="text-3xl text-black font-JakartaBold mx-10 text-center">
+                {item.title}
+              </Text>
+            </View>
+            <Text className="font-JakartaSemiBold text-center mx-10 mt-3 text-lg text-gray-500">
+              {item.description}
+            </Text>
           </View>
         ))}
       </Swiper>
