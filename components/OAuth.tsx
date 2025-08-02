@@ -4,7 +4,7 @@ import CustomButton from "./customButton";
 import { icons } from "@/constants";
 
 export default function OAuth() {
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     console.log("Google Sign In");
   };
 

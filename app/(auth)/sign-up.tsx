@@ -32,7 +32,7 @@ export default function SignUp() {
         <View className="bg-white">
           <View className="relative w-full h-[250px]">
             <Image source={images.signUpCar} className="w-full z-0 h-[250px]" />
-            <Text className="text-black font-JakartaSemiBold text-2xl absolute bottom-5 left-5">
+            <Text className="text-black font-JakartaSemiBold text-2xl absolute bottom-7 left-4">
               Create Your Account
             </Text>
           </View>
