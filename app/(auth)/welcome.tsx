@@ -17,7 +17,7 @@ export default function Onboarding() {
         onPress={() => router.replace("/(auth)/sign-up")}
         className="w-full flex justify-end items-end p-5"
       >
-        <Text className="text-black text-md font-JakartaBold">Skip</Text>
+        <Text className="text-blue-500 text-md font-JakartaBold">Skip</Text>
       </TouchableOpacity>
       <Swiper
         ref={swiperRef}
@@ -50,12 +50,13 @@ export default function Onboarding() {
       </Swiper>
       <CustomButton
         title={isLastSlide ? "Get Started" : "Next"}
-        className="w-11/12 mt-6 mb-8"
+        className="mt-6 mb-8"
         onPress={() =>
           isLastSlide
             ? router.replace("/(auth)/sign-up")
             : swiperRef.current?.scrollBy(1)
         }
+        feelVariant="thick"
       />
     </SafeAreaView>
   );
