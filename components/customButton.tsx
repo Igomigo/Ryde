@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { ButtonProps } from "@/types/type";
 
@@ -63,7 +63,7 @@ export default function CustomButton({
     >
       {IconLeft && <IconLeft />}
       <Text
-        className={`text-white ${getTextVariantStyle(textVariant)} ${getFeelVariantStyle(feelVariant)}`}
+        className={`${getTextVariantStyle(textVariant)} ${getFeelVariantStyle(feelVariant)}`}
       >
         {title}
       </Text>
