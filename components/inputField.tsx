@@ -37,7 +37,7 @@ export default function InputField({
             <Image source={icon} className={`w-6 h-6 ml-4 ${iconStyle}`} />
           )}
           <TextInput
-            className={`rounded-full flex-1 p-4 font-JakartaBold text-[15px]
+            className={`rounded-full flex-1 p-4 text-[15px]
             ${inputStyle} text-left`}
             secureTextEntry={secureTextEntry}
             onFocus={() => setIsFocused(true)}

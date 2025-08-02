@@ -88,12 +88,12 @@ export default function SignUp() {
             <OAuth />
 
             <View className="flex flex-row items-center justify-center mt-3">
-              <Text className="text-gray-500 font-JakartaMedium text-sm">
+              <Text className="text-gray-500 font-JakartaMedium">
                 Already have an account?{" "}
               </Text>
               <Link
                 href={"/sign-in"}
-                className="text-primary-500 font-JakartaMedium text-sm"
+                className="text-primary-500 font-JakartaMedium"
               >
                 sign in
               </Link>
