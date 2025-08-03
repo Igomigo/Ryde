@@ -4,8 +4,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { icons, images } from "@/constants";
 import InputField from "@/components/inputField";
 import CustomButton from "@/components/customButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import OAuth from "@/components/OAuth";
+import { useSignUp } from "@clerk/clerk-expo";
+import ReactNativeModal from "react-native-modal";
 
 interface FormData {
   name: string;
@@ -19,6 +21,73 @@ export default function SignUp() {
     email: "",
     password: "",
   });
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const [verification, setVerification] = useState({
+    state: "pending",
+    error: "",
+    code: "",
+  });
+
+  // Handle submission of sign-up form
+  const onSignUpPress = async () => {
+    if (!isLoaded) return;
+
+    // Start sign-up process using email and password provided
+    try {
+      await signUp.create({
+        emailAddress: formData.email,
+        password: formData.password,
+      });
+
+      // Send user an email with verification code
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+
+      // Set 'pendingVerification' to true to display second form
+      // and capture OTP code
+      setVerification({
+        ...verification,
+        state: "pending",
+      });
+    } catch (err) {
+      console.error(JSON.stringify(err, null, 2));
+    }
+  };
+
+  // Handle submission of verification form
+  const onVerifyPress = async () => {
+    if (!isLoaded) return;
+
+    try {
+      // Use the code the user provided to attempt verification
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code: verification.code,
+      });
+
+      // If verification was completed, set the session to active
+      // and redirect the user
+      if (signUpAttempt.status === "complete") {
+        // TODO: Create the user in the database
+        await setActive({ session: signUpAttempt.createdSessionId });
+        setVerification({
+          ...verification,
+          state: "success",
+        });
+        //router.replace('/')
+      } else {
+        setVerification({
+          ...verification,
+          state: "failed",
+          error: "Verification failed",
+        });
+      }
+    } catch (err: any) {
+      setVerification({
+        ...verification,
+        state: "failed",
+        error: err.errors[0].longMessage,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -71,7 +140,7 @@ export default function SignUp() {
 
             <CustomButton
               title="Sign Up"
-              onPress={() => {}}
+              onPress={onSignUpPress}
               className="mt-8 w-full"
               feelVariant="thick"
             />
@@ -101,6 +170,43 @@ export default function SignUp() {
           </View>
 
           {/** Verification Modal*/}
+          <ReactNativeModal
+            isVisible={verification.state === "pending"}
+            onModalHide={() => {
+              setVerification({
+                ...verification,
+                state: "success",
+              });
+            }}
+          >
+            <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+              <Text className="text-2xl font-JakartaBold text-center">
+                Verify your email
+              </Text>
+            </View>
+          </ReactNativeModal>
+
+          {/** Success Modal*/}
+          <ReactNativeModal isVisible={verification.state === "success"}>
+            <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+              <Image
+                source={images.check}
+                className="w-[110px] h-[110px] mx-auto my-5"
+              />
+              <Text className="text-2xl font-JakartaBold text-center">
+                Verified!
+              </Text>
+              <Text className="text-center mt-3 font-JakartaMedium text-gray-500 mx-5">
+                You have successfully verified your account
+              </Text>
+              <CustomButton
+                title="Browse Home"
+                feelVariant="thick"
+                className="mt-10 w-full"
+                onPress={() => router.replace("/(root)/(tabs)/home")}
+              />
+            </View>
+          </ReactNativeModal>
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
