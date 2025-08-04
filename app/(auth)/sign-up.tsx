@@ -180,9 +180,26 @@ export default function SignUp() {
             }}
           >
             <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
-              <Text className="text-2xl font-JakartaBold text-center">
-                Verify your email
+              <Text className="text-2xl font-JakartaBold">Verification</Text>
+              <Text className="mt-2 mb-5 text-gray-500 font-JakartaMedium text-sm">
+                We have sent a verification code to {formData.email}
               </Text>
+              <InputField
+                icon={icons.lock}
+                label="Code"
+                placeholder="123456"
+                value={verification.code}
+                keyboardType="numeric"
+                onChangeText={(value) =>
+                  setVerification({ ...verification, code: value })
+                }
+              />
+              {/** Error message if any */}
+              {verification.error && (
+                <Text className="text-red-500 mt-1 font-JakartaMedium text-sm">
+                  {verification.error}
+                </Text>
+              )}
             </View>
           </ReactNativeModal>
 
