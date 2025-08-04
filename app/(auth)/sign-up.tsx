@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Text, View, SafeAreaView } from "react-native";
+import { Image, Text, View, SafeAreaView, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { icons, images } from "@/constants";
 import InputField from "@/components/inputField";
@@ -9,21 +9,27 @@ import OAuth from "@/components/OAuth";
 import { useSignUp } from "@clerk/clerk-expo";
 import ReactNativeModal from "react-native-modal";
 
-interface FormData {
+interface IFormData {
   name: string;
   email: string;
   password: string;
 }
 
+interface IVerification {
+  state: "default" | "pending" | "success" | "failed";
+  error: string;
+  code: string;
+}
+
 export default function SignUp() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<IFormData>({
     name: "",
     email: "",
     password: "",
   });
   const { isLoaded, signUp, setActive } = useSignUp();
-  const [verification, setVerification] = useState({
-    state: "pending",
+  const [verification, setVerification] = useState<IVerification>({
+    state: "default",
     error: "",
     code: "",
   });
@@ -48,14 +54,23 @@ export default function SignUp() {
         ...verification,
         state: "pending",
       });
-    } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+    } catch (err: any) {
+      Alert.alert("Signup Error", err.errors[0].longMessage);
     }
   };
 
   // Handle submission of verification form
   const onVerifyPress = async () => {
     if (!isLoaded) return;
+
+    // Check if the verification code exists and is 6 digits
+    if (!verification.code || verification.code.length !== 6) {
+      setVerification({
+        ...verification,
+        error: "Invalid verification code",
+      });
+      return;
+    }
 
     try {
       // Use the code the user provided to attempt verification
@@ -172,12 +187,12 @@ export default function SignUp() {
           {/** Verification Modal*/}
           <ReactNativeModal
             isVisible={verification.state === "pending"}
-            onModalHide={() => {
-              setVerification({
-                ...verification,
-                state: "success",
-              });
-            }}
+            // onModalHide={() => {
+            //   setVerification({
+            //     ...verification,
+            //     state: "success",
+            //   });
+            // }}
           >
             <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
               <Text className="text-2xl font-JakartaBold">Verification</Text>
@@ -196,10 +211,16 @@ export default function SignUp() {
               />
               {/** Error message if any */}
               {verification.error && (
-                <Text className="text-red-500 mt-1 font-JakartaMedium text-sm">
+                <Text className="text-red-500 mt-1 text-sm">
                   {verification.error}
                 </Text>
               )}
+              <CustomButton
+                title="Verify"
+                className="mt-5 w-full bg-success-500"
+                feelVariant="semi"
+                onPress={onVerifyPress}
+              />
             </View>
           </ReactNativeModal>
 

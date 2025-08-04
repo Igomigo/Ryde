@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Image, Text, View, SafeAreaView } from "react-native";
+import { Image, Text, View, SafeAreaView, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { icons, images } from "@/constants";
 import InputField from "@/components/inputField";
 import CustomButton from "@/components/customButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import OAuth from "@/components/OAuth";
+import { useSignIn } from "@clerk/clerk-expo";
 
 interface FormData {
   email: string;
@@ -17,6 +18,32 @@ export default function SignIn() {
     email: "",
     password: "",
   });
+  const { isLoaded, signIn, setActive } = useSignIn();
+  // Handle the submission of the sign-in form
+  const onSignInPress = async () => {
+    if (!isLoaded) return;
+
+    // Start the sign-in process using the email and password provided
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: formData.email,
+        password: formData.password,
+      });
+
+      // If sign-in process is complete, set the created session as active
+      // and redirect the user
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        router.replace("/(root)/(tabs)/home");
+      } else {
+        // If the status isn't complete, check why. User might need to
+        // complete further steps.
+        console.error(JSON.stringify(signInAttempt, null, 2));
+      }
+    } catch (err: any) {
+      Alert.alert("Signin Error", err.errors[0].longMessage);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -60,7 +87,7 @@ export default function SignIn() {
 
             <CustomButton
               title="Sign In"
-              onPress={() => {}}
+              onPress={onSignInPress}
               className="mt-8 w-full"
               feelVariant="thick"
             />

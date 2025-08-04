@@ -5,7 +5,7 @@ import { Text } from 'react-native'
 export default function Home() {
   return (
     <SafeAreaView>
-      <Text>Home</Text>
+      <Text className='text-center text-2xl font-JakartaBold'>🕺🏻🕺🏻We are outside !!! 💃🏻💃🏻</Text>
     </SafeAreaView>
   )
 }

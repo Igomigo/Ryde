@@ -1,11 +1,10 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
-import { Text } from "react-native";
+import { Stack } from "expo-router";
 
-export default function RootLayout() {
+export default function _layout() {
   return (
-    <SafeAreaView>
-      <Text>Root</Text>
-    </SafeAreaView>
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 }
