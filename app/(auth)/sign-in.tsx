@@ -14,11 +14,12 @@ interface FormData {
 }
 
 export default function SignIn() {
+  const { isLoaded, signIn, setActive } = useSignIn();
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
   });
-  const { isLoaded, signIn, setActive } = useSignIn();
+
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
     if (!isLoaded) return;
@@ -36,9 +37,7 @@ export default function SignIn() {
         await setActive({ session: signInAttempt.createdSessionId });
         router.replace("/(root)/(tabs)/home");
       } else {
-        // If the status isn't complete, check why. User might need to
-        // complete further steps.
-        console.error(JSON.stringify(signInAttempt, null, 2));
+        Alert.alert("Signin Error", "Invalid email or password");
       }
     } catch (err: any) {
       Alert.alert("Signin Error", err.errors[0].longMessage);
