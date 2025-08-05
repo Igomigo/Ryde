@@ -16,7 +16,7 @@ interface IFormData {
 }
 
 interface IVerification {
-  state: "default" | "pending" | "success" | "failed";
+  state: "default" | "pending" | "success";
   error: string;
   code: string;
 }
@@ -99,14 +99,14 @@ export default function SignUp() {
       } else {
         setVerification({
           ...verification,
-          state: "failed",
+          //state: "failed",
           error: "Verification failed",
         });
       }
     } catch (err: any) {
       setVerification({
         ...verification,
-        state: "failed",
+        //state: "failed",
         error: err.errors[0].longMessage,
       });
     }
@@ -193,15 +193,7 @@ export default function SignUp() {
           </View>
 
           {/** Verification Modal*/}
-          <ReactNativeModal
-            isVisible={verification.state === "pending"}
-            // onModalHide={() => {
-            //   setVerification({
-            //     ...verification,
-            //     state: "success",
-            //   });
-            // }}
-          >
+          <ReactNativeModal isVisible={verification.state === "pending" }>
             <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
               <Text className="text-2xl font-JakartaBold">Verification</Text>
               <Text className="mt-2 mb-5 text-gray-500 font-JakartaMedium text-sm">
