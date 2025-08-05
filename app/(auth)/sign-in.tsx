@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Image, Text, View, SafeAreaView, Alert } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { icons, images } from "@/constants";
-import InputField from "@/components/inputField";
 import CustomButton from "@/components/customButton";
-import { Link, router } from "expo-router";
+import InputField from "@/components/inputField";
 import OAuth from "@/components/OAuth";
+import { icons, images } from "@/constants";
 import { useSignIn } from "@clerk/clerk-expo";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Image, SafeAreaView, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface FormData {
   email: string;
@@ -37,10 +37,10 @@ export default function SignIn() {
         await setActive({ session: signInAttempt.createdSessionId });
         router.replace("/(root)/(tabs)/home");
       } else {
-        Alert.alert("Signin Error", "Invalid email or password");
+        Alert.alert("Sign in Error", "Invalid email or password");
       }
     } catch (err: any) {
-      Alert.alert("Signin Error", err.errors[0].longMessage);
+      Alert.alert("Login Error", err.errors[0].longMessage);
     }
   };
 

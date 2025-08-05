@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Image, Text, View, SafeAreaView, Alert } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { icons, images } from "@/constants";
-import InputField from "@/components/inputField";
 import CustomButton from "@/components/customButton";
-import { Link, router } from "expo-router";
+import InputField from "@/components/inputField";
 import OAuth from "@/components/OAuth";
-import { useSignUp } from "@clerk/clerk-expo";
+import { icons, images } from "@/constants";
+import { useAuth, useSignUp } from "@clerk/clerk-expo";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Image, SafeAreaView, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ReactNativeModal from "react-native-modal";
 
 interface IFormData {
@@ -28,6 +28,7 @@ export default function SignUp() {
     password: "",
   });
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { signOut } = useAuth();
   const [verification, setVerification] = useState<IVerification>({
     state: "default",
     error: "",
@@ -78,16 +79,23 @@ export default function SignUp() {
         code: verification.code,
       });
 
-      // If verification was completed, set the session to active
-      // and redirect the user
+      // If verification was completed, DON'T set the session active
+      // Instead, sign out to ensure user needs to sign in manually
       if (signUpAttempt.status === "complete") {
         // TODO: Create the user in the database
-        await setActive({ session: signUpAttempt.createdSessionId });
+
+        // Sign out to ensure user is not automatically signed in
+        try {
+          await signOut();
+        } catch (signOutError) {
+          // Ignore sign out errors as user might not be signed in yet
+          console.log("Sign out during verification:", signOutError);
+        }
+
         setVerification({
           ...verification,
           state: "success",
         });
-        //router.replace('/')
       } else {
         setVerification({
           ...verification,
@@ -238,10 +246,10 @@ export default function SignUp() {
                 You have successfully verified your account
               </Text>
               <CustomButton
-                title="Browse Home"
+                title="Sign In"
                 feelVariant="thick"
                 className="mt-10 w-full"
-                onPress={() => router.replace("/(root)/(tabs)/home")}
+                onPress={() => router.replace("/(auth)/sign-in")}
               />
             </View>
           </ReactNativeModal>
