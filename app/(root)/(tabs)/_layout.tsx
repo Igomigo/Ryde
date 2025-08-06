@@ -12,15 +12,15 @@ const TabIcon = ({
 }) => {
   return (
     <View
-      className={`flex flex-row items-center justify-center rounded-full
-        ${focused ? "bg-general-300" : ""}`}
-    >
-      <View
-        className={`rounded-full w-12 h-12 items-center justify-center
+      className={`rounded-full w-12 h-12 items-center justify-center
         ${focused ? "bg-general-400" : ""}`}
-      >
-        <Image source={source} />
-      </View>
+    >
+      <Image
+        source={source}
+        resizeMode="contain"
+        tintColor={"white"}
+        className="w-8 h-8"
+      />
     </View>
   );
 };
@@ -36,6 +36,13 @@ export default function Layout() {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: "#333333",
+          borderRadius: 50,
+          paddingTop: 15,
+          overflow: "hidden",
+          marginHorizontal: 15,
+          marginBottom: 20,
+          height: 70,
+          position: "absolute",
         },
       }}
     >
