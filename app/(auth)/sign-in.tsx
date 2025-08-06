@@ -22,26 +22,27 @@ export default function SignIn() {
 
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
-    if (!isLoaded) return;
+    router.replace("/(root)/(tabs)/home");
+    // if (!isLoaded) return;
 
-    // Start the sign-in process using the email and password provided
-    try {
-      const signInAttempt = await signIn.create({
-        identifier: formData.email,
-        password: formData.password,
-      });
+    // // Start the sign-in process using the email and password provided
+    // try {
+    //   const signInAttempt = await signIn.create({
+    //     identifier: formData.email,
+    //     password: formData.password,
+    //   });
 
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(root)/(tabs)/home");
-      } else {
-        Alert.alert("Sign in Error", "Invalid email or password");
-      }
-    } catch (err: any) {
-      Alert.alert("Login Error", err.errors[0].longMessage);
-    }
+    //   // If sign-in process is complete, set the created session as active
+    //   // and redirect the user
+    //   if (signInAttempt.status === "complete") {
+    //     await setActive({ session: signInAttempt.createdSessionId });
+    //     router.replace("/(root)/(tabs)/home");
+    //   } else {
+    //     Alert.alert("Sign in Error", "Invalid email or password");
+    //   }
+    // } catch (err: any) {
+    //   Alert.alert("Login Error", err.errors[0].longMessage);
+    // }
   };
 
   return (
