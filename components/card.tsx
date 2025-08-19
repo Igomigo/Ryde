@@ -13,7 +13,7 @@ const Card = ({ children, className, variant = "default" }: CardProps) => {
 
   return (
     <View
-      className={`rounded-lg p-4 ${getVariantStyles(variant)} ${className}`}
+      className={`rounded-lg flex flex-col gap-2 p-4 ${getVariantStyles(variant)} ${className}`}
     >
       {children}
     </View>
@@ -21,7 +21,19 @@ const Card = ({ children, className, variant = "default" }: CardProps) => {
 };
 
 const CardTitle = ({ children, className }: CardTitleProps) => {
-  return <Text className={`text-lg font-semibold `}>{children}</Text>;
+  return (
+    <Text className={`text-lg font-semibold ${className}`}>{children}</Text>
+  );
 };
 
-export { Card };
+const CardDescription = ({ children, className }: CardDescriptionProps) => {
+  return (
+    <Text className={`text-sm text-gray-500 ${className}`}>{children}</Text>
+  );
+};
+
+const CardContent = ({ children, className }: CardContentProps) => {
+  return <View className={`${className}`}>{children}</View>;
+};
+
+export { Card, CardContent, CardDescription, CardTitle };
