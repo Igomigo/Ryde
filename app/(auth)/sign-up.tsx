@@ -159,6 +159,10 @@ export default function SignUp() {
               onChangeText={(value) =>
                 setFormData({ ...formData, password: value })
               }
+
+
+
+              
             />
 
             <CustomButton
