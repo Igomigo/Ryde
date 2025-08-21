@@ -7,7 +7,7 @@ const Card = ({ children, className, variant = "default" }: CardProps) => {
       case "elevated":
         return "shadow-md";
       default:
-        return "border border-gray-200";
+        return "border border-gray-300";
     }
   };
 
