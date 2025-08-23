@@ -1,20 +1,21 @@
-declare interface CardProps {
+interface common {
   className?: string;
   children: React.ReactNode;
+}
+
+declare interface CardProps {
+  common: common;
   variant?: "default" | "elevated";
 }
 
 declare interface CardTitleProps {
-  className?: string;
-  children: React.ReactNode;
+  common: common;
 }
 
 declare interface CardDescriptionProps {
-  className?: string;
-  children: React.ReactNode;
+  common: common;
 }
 
 declare interface CardContentProps {
-  className?: string;
-  children: React.ReactNode;
+  common: common;
 }
